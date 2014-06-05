@@ -16,14 +16,6 @@
     (reset! db-factory {:factory (fn [& args] (.getConnection ds))
                         :ds ds})))
 
-(defmacro with-db [& body]
-  `(jdbc/with-connection @db-factory
-     ~@body))
-
-(defn do-commands [& commands]
-  (jdbc/with-connection @db-factory
-    (apply jdbc/do-commands commands)))
-
 (defn query [& query]
   (with-db (jdbc/with-query-results rs (vec query) (doall rs))))
 
